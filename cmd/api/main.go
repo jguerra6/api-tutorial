@@ -20,6 +20,7 @@ import (
 	"github.com/jguerra6/api-tutorial/internal/adapters/postgres"
 	"github.com/jguerra6/api-tutorial/internal/app/users"
 	"github.com/jguerra6/api-tutorial/internal/transport/http"
+	"github.com/jguerra6/api-tutorial/internal/transport/http/docs"
 )
 
 const (
@@ -77,6 +78,7 @@ func main() {
 
 	router := transporthttp.NewRouter(cfg, *userSvc, nil, authAdapter, &logger)
 
+	createSwaggerConfig(cfg.Port)
 	startServer(router, &logger, cfg.Port)
 
 }
@@ -125,4 +127,9 @@ func shutdownServer(restServer *http.Server, logger *zerolog.Logger) {
 			Err(err).
 			Msg("error shutting down the HTTP server")
 	}
+}
+
+func createSwaggerConfig(port string) {
+	docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%v", port)
+	docs.SwaggerInfo.Schemes = []string{"http"}
 }

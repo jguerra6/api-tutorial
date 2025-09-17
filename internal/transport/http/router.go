@@ -35,6 +35,7 @@ func NewRouter(cfg *config.Config, userSvc users.Service, dbPing handlers.DBPing
 	hh := handlers.NewHealthHandler(dbPing)
 	r.HandleFunc("/healthz", hh.Healthz).Methods(http.MethodGet).Name("healthz")
 	r.HandleFunc("/readyz", hh.Readyz).Methods(http.MethodGet).Name("readyz")
+	InitSwaggerBindings(r)
 
 	uh := handlers.NewUserHandler(&userSvc)
 
